@@ -37,9 +37,7 @@ namespace StocksApp.Controllers
 
             if (stockSymbol != null)
             {
-                var stockCompanyProfile = await _finnhubService.GetCompanyProfile(stockSymbol);
-
-                ViewData["SelectedStockCompanyProfile"] = stockCompanyProfile;
+                ViewData["SelectedStockSymbol"] = stockSymbol;
             }
 
             return View(stocks);
