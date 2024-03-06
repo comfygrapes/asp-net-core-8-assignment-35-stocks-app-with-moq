@@ -27,6 +27,8 @@
         </div>
         <div class="navbar flex">
             <div class="flex">
+                <a asp-action="Explore" asp-controller="Stocks" class="link-hover @(ViewBag.ActivePage != null && ViewBag.ActivePage == "Trade/Explore" ? "nav-active" : "")" style="text-decoration: none; color: #0349A3;">Explore</a>
+                <div style="margin: 0 5px;"></div>
                 <a asp-action="Index" asp-controller="Trade" class="link-hover @(ViewBag.ActivePage != null && ViewBag.ActivePage == "Trade/Index" ? "nav-active" : "")" style="text-decoration: none; color: #0349A3;">Trade</a>
                 <div style="margin: 0 5px;"></div>
                 <a asp-action="Orders" asp-controller="Trade" class="link-hover @(ViewBag.ActivePage != null && ViewBag.ActivePage == "Trade/Orders" ? "nav-active" : "")" style="text-decoration: none; color: #0349A3;">Orders</a>

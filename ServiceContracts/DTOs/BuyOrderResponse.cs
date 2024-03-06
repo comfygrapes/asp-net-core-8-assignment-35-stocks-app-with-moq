@@ -29,7 +29,7 @@ namespace ServiceContracts.DTOs
     {
         public static BuyOrderResponse ToBuyOrderResponse(this BuyOrder buyOrder)
         {
-            return new BuyOrderResponse()
+            var buyOrderResponse = new BuyOrderResponse()
             {
                 BuyOrderId = buyOrder.BuyOrderId,
                 StockSymbol = buyOrder.StockSymbol,
@@ -38,6 +38,8 @@ namespace ServiceContracts.DTOs
                 Quantity = buyOrder.Quantity,
                 Price = buyOrder.Price,
             };
+
+            return buyOrderResponse;
         }
     }
 }

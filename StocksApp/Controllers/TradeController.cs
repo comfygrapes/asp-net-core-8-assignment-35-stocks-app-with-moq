@@ -12,38 +12,43 @@ namespace StocksApp.Controllers
     public class TradeController : Controller
     {
         private readonly IFinnhubService _finnhubService;
-        private readonly IOptions<TradingOptions> _tradingOptions;
         private readonly IConfiguration _configuration;
         private readonly IStocksService _stocksService;
+        private readonly TradingOptions _tradingOptions;
 
-        public TradeController(IFinnhubService myService, IOptions<TradingOptions> tradingOptions, IConfiguration configuration, IStocksService stocksService)
+        public TradeController(IFinnhubService myService, IConfiguration configuration, IStocksService stocksService, IOptions<TradingOptions> tradingOptions)
         {
             _finnhubService = myService;
-            _tradingOptions = tradingOptions;
             _configuration = configuration;
             _stocksService = stocksService;
+            _tradingOptions = tradingOptions.Value;
         }
 
         [HttpGet]
-        [Route("/")]
-        [Route("[Action]")]
-        public async Task<IActionResult> Index()
+        [Route("[Action]/{stockSymbol}")]
+        [Route("~/[controller]/{stockSymbol}")]
+        public async Task<IActionResult> Index(string stockSymbol)
         {
-            if (_tradingOptions.Value.DefaultStockSymbol == null)
+            if (string.IsNullOrEmpty(stockSymbol))
             {
-                _tradingOptions.Value.DefaultStockSymbol = "MSFT";
+                stockSymbol = "MSFT";
             }
-            
-            var stock = await _finnhubService.GetStockPriceQuote(_tradingOptions.Value.DefaultStockSymbol);
-            var company = await _finnhubService.GetCompanyProfile(_tradingOptions.Value.DefaultStockSymbol);
 
-            StockTrade stockTrade = new StockTrade()
+            var company = await _finnhubService.GetCompanyProfile(stockSymbol);
+            var stock = await _finnhubService.GetStockPriceQuote(stockSymbol);
+
+            var stockTrade = new StockTrade() { StockSymbol = stockSymbol };
+            
+            if (stock != null && company != null)
             {
-                StockSymbol = _tradingOptions.Value.DefaultStockSymbol,
-                StockName = company?["name"].ToString(),
-                Price = Convert.ToDouble(stock?["c"].ToString()),
-                Quantity = 100,
-            };
+                stockTrade = new StockTrade() 
+                { 
+                    StockSymbol = company["ticker"].ToString(), 
+                    StockName = company["name"].ToString(), 
+                    Quantity = Convert.ToUInt32(_tradingOptions.DefaultOrderQuantity), 
+                    Price = Convert.ToDouble(stock["c"].ToString()) 
+                };
+            }
 
             ViewData["ApiKey"] = _configuration["FinnhubToken"];
             return View(stockTrade);

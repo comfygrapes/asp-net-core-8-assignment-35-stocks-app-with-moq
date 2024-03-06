@@ -1,0 +1,11 @@
+﻿@model Dictionary<string, object>?
+
+<img src="@Model["logo"]" alt="company-logo" />
+<h2>@($"{Model["name"]} ({Model["ticker"]})") (TCN)</h2>
+<h4 class="button-panel">@Model["finnhubIndustry"]</h4>
+
+<h3>Exchange: <span style="font-size: 24px;">@Model["exchange"]</span></h3>
+
+<h1>$ <span>155.74</span></h1>
+
+<a asp-action="Index" asp-controller="Trade" asp-route-stockSymbol="@Model["ticker"]" class="button button-blue-back">Trade Now</a>

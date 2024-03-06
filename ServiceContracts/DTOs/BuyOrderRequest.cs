@@ -17,11 +17,10 @@ namespace ServiceContracts.DTOs
         [Range(1, 10000)]
         public double Price { get; set; }
 
-        public BuyOrder ToBuyOrder(Guid buyOrderId)
+        public BuyOrder ToBuyOrder()
         {
             return new BuyOrder
             {
-                BuyOrderId = buyOrderId,
                 StockSymbol = StockSymbol,
                 StockName = StockName,
                 DateAndTimeOfOrder = DateAndTimeOfOrder,
